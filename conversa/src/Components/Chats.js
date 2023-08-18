@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toggleTheme } from '../Features/themeSlice';
 import axios from "axios";
 import { myContext } from "./MainContainer";
+import { API_URL } from './config';
+
 
 function Chats() {
 
@@ -34,7 +36,7 @@ function Chats() {
         },
     };
 
-        axios.get("http://localhost:8080/chat/", config).then((response) => {
+        axios.get(`${API_URL}/chat/`, config).then((response) => {
         console.log("Data refresh in sidebar ", response.data);
         setConversations(response.data);
         // setRefresh(!refresh);

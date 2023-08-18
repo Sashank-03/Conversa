@@ -15,6 +15,8 @@ import { useDispatch } from "react-redux";
 import { create } from "@mui/material/styles/createTransitions";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { API_URL } from './config';
+
 
 function CreateGroups() {
 
@@ -51,7 +53,7 @@ function CreateGroups() {
     };
     // console.log(userData);
     axios.post(
-      "http://localhost:8080/chat/createGroup",
+      `${API_URL}/chat/createGroup`,
       {
         name: groupName,
         users: users,

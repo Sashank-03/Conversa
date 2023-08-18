@@ -19,6 +19,7 @@
     .login-container{
         width: 100vw !important;
         height: 100vh !important;
+        border-radius: 0 !important;
         
     }
 
@@ -30,6 +31,7 @@
     .main-container{
         width: 100vw !important;
         height: 100vh !important;
+        border-radius: 0 !important;
     }
     .sb-chats{
         display: none !important;

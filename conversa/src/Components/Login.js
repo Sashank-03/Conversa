@@ -3,6 +3,7 @@ import logo from "../Images/fin2.png";
 import { Backdrop, Button, CircularProgress, TextField } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { API_URL } from './config';
 import Toaster from "./Toaster";
 
 function Login() {
@@ -30,7 +31,7 @@ function Login() {
       };
 
       const response = await axios.post(
-        "http://localhost:8080/user/login/",
+        `${API_URL}/user/login/`,
         data,
         config
       );
@@ -58,7 +59,7 @@ function Login() {
       };
 
       const response = await axios.post(
-        "http://localhost:8080/user/register/",
+        `${API_URL}/user/register/`,
         data,
         config
       );
