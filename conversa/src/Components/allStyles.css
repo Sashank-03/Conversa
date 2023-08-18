@@ -595,7 +595,7 @@
 
 .usersonline-header{
     display: flex;
-    /* flex: 1; */
+    /* flex: 0.7; */
     /* flex-direction: column; */
     align-items: center;
     justify-content: space-between;

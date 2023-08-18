@@ -117,7 +117,7 @@ function ChatArea() {
           display: "flex",
           flexDirection: "column",
           gap: "0.625rem",
-          flex: 0.7
+          // flex: 0.7
         }}
       >
         <Skeleton

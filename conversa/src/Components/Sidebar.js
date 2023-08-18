@@ -134,7 +134,7 @@ function Sidebar() {
                         onClick={() => {
                         console.log("Refresh fired from sidebar");
                         // dispatch(refreshSidebarFun());
-                        setRefresh(!refresh);
+                        // setRefresh(!refresh);
                     }}
                     >
                         <div
