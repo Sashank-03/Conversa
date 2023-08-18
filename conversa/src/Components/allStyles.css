@@ -86,7 +86,7 @@
         display: grid !important;
         justify-self: flex-start !important;
         /* grid-template-columns: 1.25rem auto; */
-        grid-template-rows: 2.5rem auto !important;
+        grid-template-rows: 5rem auto !important;
     }
 
     .icons2{
@@ -99,8 +99,8 @@
         /* align-items: center !important;
         justify-content: center !important; */
         /* justify-content: space-evenly !important; */
-        justify-self: flex-start !important;
-        grid-template-rows: 0.938rem auto 0.938rem auto !important;
+        justify-self: center !important;
+        grid-template-rows: auto auto auto auto !important;
     }
 }
 
