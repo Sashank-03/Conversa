@@ -41,7 +41,7 @@ app.use("/message", messageRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
-const PORT = process.env.PORT ;
+const PORT = process.env.PORT || 8080;
 const server= app.listen(PORT, console.log("Server is Running..."));
 
 const io = require("socket.io") (server,{
