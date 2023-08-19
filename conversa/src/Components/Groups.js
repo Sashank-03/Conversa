@@ -7,7 +7,6 @@ import { motion } from "framer-motion";
 import RefreshOutlinedIcon from '@mui/icons-material/RefreshOutlined';
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { refreshSidebarFun } from "../Features/refreshSidebar";
 import { myContext } from "./MainContainer";
 import { API_URL } from './config';
 
@@ -96,14 +95,14 @@ function Groups() {
                     },
                   };
                   axios.put(
-                    "http://localhost:8080/chat/addSelfToGroup",
+                    `${API_URL}/chat/addSelfToGroup`,
                     {
                       chatId: group._id,
                       userId: userData.data._id,
                     },
                     config
                   );
-                  dispatch(refreshSidebarFun());
+                  setRefresh(!refresh);
                 }}
               >
                 <p className={"con-icon" + (lightTheme ? "" : " dark5")}>T</p>

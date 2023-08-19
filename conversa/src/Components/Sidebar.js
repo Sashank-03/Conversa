@@ -13,7 +13,6 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleTheme } from '../Features/themeSlice';
 import axios from "axios";
-import { refreshSidebarFun } from "../Features/refreshSidebar";
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import ChatOutlinedIcon from '@mui/icons-material/ChatOutlined';
 import { myContext } from "./MainContainer";
@@ -23,7 +22,7 @@ import { API_URL } from './config';
 
 function Sidebar() {
 
-    
+    const [refreshToggle, setRefreshToggle] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const lightTheme = useSelector((state) => state.themeKey);
@@ -53,8 +52,15 @@ function Sidebar() {
         console.log("Data refresh in sidebar ", response.data);
         setConversations(response.data);
         // setRefresh(!refresh);
+        setRefreshToggle(false);
         });
-    });
+    }, [refreshToggle]);
+
+    useEffect(() => {
+        // Toggle refreshToggle to true, then toggle it back to false
+        setRefreshToggle(true);
+        // setRefreshToggle(false);
+    }, [refresh]);
 
 
 

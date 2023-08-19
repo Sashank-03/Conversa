@@ -8,7 +8,6 @@ import { useDispatch} from "react-redux";
 import {motion } from "framer-motion";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { refreshSidebarFun } from "../Features/refreshSidebar";
 import { myContext } from "./MainContainer";
 import { API_URL } from './config';
 
@@ -95,14 +94,13 @@ function Users() {
                     },
                   };
                   axios.post(
-                    "http://localhost:8080/chat/",
+                    `${API_URL}/chat/`,
                     {
                       userId: user._id,
                     },
                     config
                   );
-                  // setRefresh(!refresh);
-                  dispatch(refreshSidebarFun());
+                  setRefresh(!refresh);
                 }}
               >
                 <p className={"con-icon" + (lightTheme ? "" : " dark5")}>T</p>
