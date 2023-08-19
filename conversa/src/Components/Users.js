@@ -37,7 +37,7 @@ function Users() {
       },
     };
     axios.get(`${API_URL}/user/fetchUsers`, config).then((data) => {
-      console.log("UData refreshed in Users panel ");
+      console.log(data);
       setUsers(data.data);
       // setRefresh(!refresh);
       // dispatch(refreshSidebarFun());
