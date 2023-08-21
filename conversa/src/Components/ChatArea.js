@@ -1,12 +1,12 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import {IconButton} from "@mui/material"
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import SendIcon from '@mui/icons-material/Send';
 import MessagesOthers from './MessagesOthers';
 import MessagesSelf from './MessagesSelf';
 import { useSelector } from 'react-redux';
-import { useDispatch} from "react-redux";
-import { useParams } from "react-router-dom";
+// import { useDispatch} from "react-redux"
+import { useNavigate, useParams } from "react-router-dom";
 import Skeleton from "@mui/material/Skeleton";
 import axios from "axios";
 import { myContext } from "./MainContainer";
@@ -23,18 +23,51 @@ function ChatArea() {
 
   const lightTheme = useSelector((state) => state.themeKey);
   const [messageContent, setMessageContent] = useState("");
-  const messagesEndRef = useRef(null);
+  // const messagesEndRef = useRef(null);
   const dyParams = useParams();
   const [chat_id, chat_user] = dyParams._id.split("&");
   // console.log(chat_id, chat_user);
   const userData = JSON.parse(localStorage.getItem("userData"));
+  const [conversations, setConversations] = useState([]);
   const [allMessages, setAllMessages] = useState([]);
+  const [isGroup, setIsGroup] = useState(false);
   const [allMessagesCopy, setAllMessagesCopy] = useState([]);
+  // const [groups, SetGroups] = useState([]);
+  const navigate = useNavigate();
+
   // console.log("Chat area id : ", chat_id._id);
   // const refresh = useSelector((state) => state.refreshKey);
   const { refresh, setRefresh } = useContext(myContext);
   const [loaded, setloaded] = useState(false);
   const [socketConnectionStatus, setSocketConnectionStatus] = useState(false);
+
+  useEffect(() => {
+    // console.log("Sidebar : ", user.token);
+    const config = {
+    headers: {
+        Authorization: `Bearer ${userData.data.token}`,
+    },
+};
+
+    axios.get(`${API_URL}/chat/`, config).then((response) => {
+    console.log("Data refresh in sidebar ", response.data);
+    setConversations(response.data);
+    // dispatch(refreshSidebarFun(refresh));
+    // setRefresh(!refresh);
+    });
+},[userData.data.token]);
+
+useEffect(()=>{
+  setIsGroup(false);
+  conversations.map((conversation, index) => {
+    console.log(conversation._id);
+    console.log(chat_id);
+    if (conversation._id==chat_id && conversation.isGroupChat) {
+        setIsGroup(true);
+    }
+  });
+
+}, [refresh, allMessages]);
 
 
 
@@ -62,17 +95,18 @@ function ChatArea() {
       socket.emit("newMessage", data);
 
   };
+  // console.log(userData.data);
   // const scrollToBottom = () => {
   //   messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   // };
 //connect to socket
   useEffect(() => {
     socket =io(ENDPOINT);
-    socket.emit ("setup", userData); 
+    socket.emit("setup", userData); 
     socket.on("connection", () => {
       setSocketConnectionStatus(!socketConnectionStatus); 
     });
-  }, []);
+  },[]);
 
   useEffect(() => {
     socket.on("message recieved", (newMessage) =>{
@@ -97,7 +131,7 @@ function ChatArea() {
       .then(({ data }) => {
         setAllMessages(data);
         setloaded(true);
-        // console.log("Data from Acess Chat API ", data);
+        console.log("Data from Acess Chat API ", data);
         socket.emit("join chat", chat_id);
       });
       setAllMessagesCopy(allMessages);
@@ -109,16 +143,16 @@ function ChatArea() {
 
   if (!loaded) {
     return (
-      <div
-        style={{
-        //   border: "20px",
-          padding: "0.625rem",
-          width: "100%",
-          display: "flex",
-          flexDirection: "column",
-          gap: "0.625rem",
-          // flex: 0.7
-        }}
+      <div className='loading'
+        // style={{
+        //   // border: "20px",
+        //   padding: "0.625rem",
+        //   width: "100%",
+        //   display: "flex",
+        //   flexDirection: "column",
+        //   gap: "0.625rem",
+        //   flex: 0.7
+        // }}
       >
         <Skeleton
           variant="rectangular"
@@ -155,9 +189,29 @@ function ChatArea() {
               {props.timeStamp}
             </p> */}
           </div>
-          <IconButton className={"icon" + (lightTheme ? "" : " dark")}>
-            <DeleteOutlineOutlinedIcon />
-          </IconButton>
+          {isGroup &&  (<IconButton className={"icon" + (lightTheme ? "" : " dark")}>
+            <DeleteOutlineOutlinedIcon 
+            onClick={() => {
+              console.log("Deleting group chat");
+              const config = {
+                headers: {
+                  Authorization: `Bearer ${userData.data.token}`,
+                },
+              };
+              axios.put(
+                `${API_URL}/chat/groupExit`,
+                {
+                  chatId: chat_id,
+                  userId: userData.data._id,  
+                },
+                config
+              );
+              setRefresh(!refresh);
+              navigate("../../app/welcome", {replace: true});
+              // window.location.href = `${API_URL}/app/welcome`
+            }}
+            />
+          </IconButton>)}
         </div>
         <div className={"chatarea-messages" + (lightTheme ? "" : " dark")}>
           {allMessages

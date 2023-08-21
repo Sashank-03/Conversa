@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import logo from "../Images/fin2.png"
 import { IconButton } from '@mui/material'
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { motion } from "framer-motion";
 import RefreshOutlinedIcon from '@mui/icons-material/RefreshOutlined';
 import axios from "axios";
@@ -16,7 +16,7 @@ function Groups() {
   const { refresh, setRefresh } = useContext(myContext);
 
   const lightTheme = useSelector((state) => state.themeKey);
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const [groups, SetGroups] = useState([]);
   const userData = JSON.parse(localStorage.getItem("userData"));
   // console.log("Data from LocalStorage : ", userData);
@@ -41,7 +41,7 @@ function Groups() {
         console.log("Group Data from API ", response.data);
         SetGroups(response.data);
       });
-  }, [refresh]);
+  }, [refresh, user.token]);
 
 
     return (
@@ -105,7 +105,7 @@ function Groups() {
                   setRefresh(!refresh);
                 }}
               >
-                <p className={"con-icon" + (lightTheme ? "" : " dark5")}>T</p>
+                <p className={"con-icon" + (lightTheme ? "" : " dark5")}>{group.chatName[0]}</p>
                 <p className={"con-title" + (lightTheme ? "" : " dark")}>
                   {group.chatName}
                 </p>

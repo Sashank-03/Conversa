@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useRef } from 'react'
 import './allStyles.css'
 import { useState } from 'react';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
@@ -22,12 +22,12 @@ import { API_URL } from './config';
 
 function Sidebar() {
 
-    const [refreshToggle, setRefreshToggle] = useState(false);
+    
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const lightTheme = useSelector((state) => state.themeKey);
     // const refresh = useSelector((state) => state.refreshKey);
-    const { refresh, setRefresh } = useContext(myContext);
+    const { refresh} = useContext(myContext);
     console.log("Context API : refresh : ", refresh);
     const [conversations, setConversations] = useState([]);
     // console.log("Conversations of Sidebar : ", conversations);
@@ -39,6 +39,7 @@ function Sidebar() {
         nav("/");
     }
 
+    const [refreshToggle, setRefreshToggle] = useState(false);
     const user = userData.data;
     useEffect(() => {
         // console.log("Sidebar : ", user.token);
@@ -51,16 +52,18 @@ function Sidebar() {
         axios.get(`${API_URL}/chat/`, config).then((response) => {
         console.log("Data refresh in sidebar ", response.data);
         setConversations(response.data);
-        // setRefresh(!refresh);
         setRefreshToggle(false);
+        // dispatch(refreshSidebarFun(refresh));
+        // setRefresh(!refresh);
         });
-    }, [refreshToggle]);
+    },[refreshToggle, user.token]);
+    // console.log(conversations);
 
     useEffect(() => {
-        // Toggle refreshToggle to true, then toggle it back to false
+        // Trigger the refresh by toggling refreshToggle
         setRefreshToggle(true);
-        // setRefreshToggle(false);
     }, [refresh]);
+    
 
 
 
